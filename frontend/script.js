@@ -27,14 +27,18 @@ const renderIngredients = (ingredients) => {
 const renderPizza = (element) => {
   console.log(element)
 
-  return `<div class="card shadow h-100">
+  return `<div class="card shadow h-100" id=${element.id}>
    <div class=card-body>
+    <span hidden ></span>
     <h5 class="card-title">${element.name}</h5>
     <h6 class="card-subtitle">${element.price} €</h6>
     <p class="card-text">Description: ${
       element.synopsis != '' ? element.description : 'N.D'
     }</p>
    </div>
+   <button type="button" class="btn btn-danger" onclick="deletePizza(${
+     element.id
+   })">Elimina</button>
    <div class="card-footer">
    ${renderIngredients(element.ingredients)}
    </div>
@@ -83,6 +87,26 @@ const getPizza = async () => {
   } catch (error) {
     console.log(error)
   }
+}
+
+// Funzione che elimina la pizza selezionata
+
+function deletePizza(id) {
+  // Preleva l'id della pizza
+  const div = document.getElementById(id)
+  const pizzaId = div.id
+  console.log(pizzaId)
+
+  // Invia la richiesta Axios
+  axios
+    .delete(apiUrl + `/${pizzaId}`)
+    .then(() => {
+      // Aggiorna la lista delle pizze
+      getPizza()
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }
 
 getPizza()
